@@ -84,9 +84,16 @@ function resizeAllMarkedElements() {
   });
 }
 
-// Auto-run on DOM load if elements are marked with data-resize-to-fit
+// Auto-run on multiple triggers to ensure it executes before PDF capture
 if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', function() {
+  // Try immediate execution if DOM is already interactive or complete
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
     resizeAllMarkedElements();
-  });
+  }
+
+  // Also listen for DOMContentLoaded as backup
+  document.addEventListener('DOMContentLoaded', resizeAllMarkedElements);
+
+  // And window load as final backup
+  window.addEventListener('load', resizeAllMarkedElements);
 }
